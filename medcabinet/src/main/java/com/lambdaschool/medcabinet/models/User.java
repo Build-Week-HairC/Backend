@@ -47,6 +47,10 @@ public class User extends Auditable
     @JsonIgnoreProperties("user")
     private List<Useremail> useremails = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "users")
+    @JsonIgnoreProperties("users")
+    private List<Strain> strains = new ArrayList<>();
+
     public User()
     {
     }
@@ -142,6 +146,16 @@ public class User extends Auditable
     public void setUseremails(List<Useremail> useremails)
     {
         this.useremails = useremails;
+    }
+
+    public List<Strain> getStrains()
+    {
+        return strains;
+    }
+
+    public void setStrains(List<Strain> strains)
+    {
+        this.strains = strains;
     }
 
     @JsonIgnore
