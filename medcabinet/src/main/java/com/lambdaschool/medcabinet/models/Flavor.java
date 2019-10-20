@@ -14,7 +14,7 @@ public class Flavor
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long flavorid;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String flavorname;
 
   @ManyToMany(mappedBy = "flavors")

@@ -14,7 +14,7 @@ public class Effect
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long effectid;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String effectname;
 
   @ManyToMany(mappedBy = "effects")
