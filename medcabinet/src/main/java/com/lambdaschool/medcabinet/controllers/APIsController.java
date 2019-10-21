@@ -1,7 +1,10 @@
 package com.lambdaschool.medcabinet.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lambdaschool.medcabinet.logging.Loggable;
 import com.lambdaschool.medcabinet.models.APIOpenLibrary;
+import com.lambdaschool.medcabinet.models.APIStrain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -15,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -70,5 +76,36 @@ public class APIsController
         System.out.println(ourBooks);
         return new ResponseEntity<>(ourBooks,
                                     HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/ds/{query}",
+                produces = {"application/json"})
+    public ResponseEntity<?> searchStrains(HttpServletRequest request,
+                                           @PathVariable String query) throws IOException
+    {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
+
+        // TODO -- restrict query to alphanumeric characters
+
+        query = query.replaceAll("[\\s]", ",");
+
+        String requestURL = "https://morning-badlands-32563.herokuapp.com/recommend/?format=json&" + query + "=";
+
+        ParameterizedTypeReference<String> responseType = new ParameterizedTypeReference<>()
+        {
+        };
+        ResponseEntity<String> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, null, responseType);
+
+        String jsonString = responseEntity.getBody();
+
+//        APIStrain[] jsonList = new ObjectMapper().readValue(jsonString, APIStrain[].class);
+
+//        List<APIStrain> jsonList = Arrays.asList(new ObjectMapper().readValue(jsonString, APIStrain.class));
+
+//        List<APIStrain> jsonList = new ObjectMapper().readValue(jsonString, new TypeReference<List<APIStrain>>() {});
+//
+//        System.out.println("\n\n" + jsonList + "\n\n");
+
+        return new ResponseEntity<>(jsonString, HttpStatus.OK);
     }
 }
