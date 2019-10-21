@@ -12,7 +12,7 @@ public class Strain extends Auditable
 {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long strainid;
+  private Long strainid;
 
   @Column(nullable = false, unique = true)
   private String strainname;
@@ -50,14 +50,15 @@ public class Strain extends Auditable
   {
   }
 
-  public Strain(String type, double rating, String description)
+  public Strain(String strainname, String type, Double rating, String description)
   {
+    this.strainname = strainname;
     this.type = type;
     this.rating = rating;
     this.description = description;
   }
 
-  public long getStrainid()
+  public Long getStrainid()
   {
     return strainid;
   }
@@ -65,6 +66,16 @@ public class Strain extends Auditable
   public void setStrainid(long strainid)
   {
     this.strainid = strainid;
+  }
+
+  public String getStrainname()
+  {
+    return strainname;
+  }
+
+  public void setStrainname(String strainname)
+  {
+    this.strainname = strainname;
   }
 
   public String getType()
@@ -82,7 +93,7 @@ public class Strain extends Auditable
     return rating;
   }
 
-  public void setRating(double rating)
+  public void setRating(Double rating)
   {
     this.rating = rating;
   }
@@ -130,6 +141,6 @@ public class Strain extends Auditable
   @Override
   public String toString()
   {
-    return "Strain{" + "strainid=" + strainid + ", type='" + type + '\'' + ", rating=" + rating + ", description='" + description + '\'' + ", users=" + users + ", effects=" + effects + ", flavors=" + flavors + '}';
+    return "Strain{" + "strainid=" + strainid + ", strainname='" + strainname + '\'' + ", type='" + type + '\'' + ", rating=" + rating + ", description='" + description + '\'' + ", users=" + users + ", effects=" + effects + ", flavors=" + flavors + '}';
   }
 }
