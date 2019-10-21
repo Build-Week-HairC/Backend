@@ -1,6 +1,7 @@
 package com.lambdaschool.medcabinet.services;
 
 import com.lambdaschool.medcabinet.models.Strain;
+import com.lambdaschool.medcabinet.view.StrainView;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ public interface StrainService
 {
   List<Strain> findAll();
 
-  List<Strain> findByUserId(Long userid);
+  List<StrainView> findByUserId(Long userid);
 
   Strain save(Strain strain);
 

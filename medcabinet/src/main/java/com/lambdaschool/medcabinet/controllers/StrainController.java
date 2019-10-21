@@ -33,7 +33,7 @@ public class StrainController
   public ResponseEntity<?> findStrainsByUser(@PathVariable
                                                  Long userid)
   {
-    return new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(strainService.findByUserId(userid), HttpStatus.OK);
   }
 
   // add a strain to a user by user id

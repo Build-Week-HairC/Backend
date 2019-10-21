@@ -6,6 +6,7 @@ import com.lambdaschool.medcabinet.models.Strain;
 import com.lambdaschool.medcabinet.models.User;
 import com.lambdaschool.medcabinet.repository.StrainRepository;
 import com.lambdaschool.medcabinet.repository.UserRepository;
+import com.lambdaschool.medcabinet.view.StrainView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,11 +31,9 @@ public class StrainServiceImpl implements StrainService
   }
 
   @Override
-  public List<Strain> findByUserId(Long userid)
+  public List<StrainView> findByUserId(Long userid)
   {
-    List<Strain> list = new ArrayList<>();
-//    strainrepos.fin
-    return null;
+    return strainrepos.findByUserId(userid);
   }
 
   @Override
