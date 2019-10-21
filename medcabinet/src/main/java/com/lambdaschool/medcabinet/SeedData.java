@@ -3,11 +3,9 @@ package com.lambdaschool.medcabinet;
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
-import com.lambdaschool.medcabinet.models.Role;
-import com.lambdaschool.medcabinet.models.User;
-import com.lambdaschool.medcabinet.models.UserRoles;
-import com.lambdaschool.medcabinet.models.Useremail;
+import com.lambdaschool.medcabinet.models.*;
 import com.lambdaschool.medcabinet.services.RoleService;
+import com.lambdaschool.medcabinet.services.StrainService;
 import com.lambdaschool.medcabinet.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 // comment out these annotations in production if you don't want seed data to be loaded
@@ -27,6 +26,9 @@ public class SeedData implements CommandLineRunner
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    StrainService strainService;
 
 
     @Override
@@ -48,6 +50,15 @@ public class SeedData implements CommandLineRunner
                                  r2));
 //        admins.add(new UserRoles(new User(),
 //                                 r3));
+
+        Strain s1 = new Strain("100-Og", "hybrid", 4.0, "$100 OG is a 50/50 hybrid strain that packs a strong punch. The name supposedly refers to both its strength and high price when it first started showing up in Hollywood.");
+        Strain s2 = new Strain("98-White-Widow", "hybrid", 4.7, "The ‘98 Aloha White Widow is an especially potent cut of White Widow that has grown in renown alongside Hawaiian legends like Maui Wowie and Kona Gold.");
+        Strain s3 = new Strain("1024", "sativa", 4.4, "1024 is a sativa-dominant hybrid bred in Spain by Medical Seeds Co. The breeders claim to guard the secret genetics due to security reasons, but regardless of its genetic heritage, 1024 is a THC power");
+
+        List<Strain> u1Strains = new ArrayList<>();
+        u1Strains.add(s2);
+        u1Strains.add(s3);
+
         User u1 = new User("admin",
                            "password",
                            "admin@lambdaschool.local",
@@ -59,7 +70,15 @@ public class SeedData implements CommandLineRunner
           .add(new Useremail(u1,
                              "admin@mymail.local"));
 
+        u1.setStrains(u1Strains);
+
+        System.out.println("\n\n" + u1 + "\n\n");
+
         userService.save(u1);
+
+        strainService.save(s1);
+        strainService.save(s2);
+        strainService.save(s3);
 
         // data, user
 //        ArrayList<UserRoles> datas = new ArrayList<>();

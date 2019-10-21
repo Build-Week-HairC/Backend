@@ -1,16 +1,21 @@
 package com.lambdaschool.medcabinet.services;
 
 import com.lambdaschool.medcabinet.models.Strain;
+import com.lambdaschool.medcabinet.view.StrainView;
 
 import java.util.List;
 
 public interface StrainService
 {
-  List<Strain> findByUserId(long userid);
+  List<Strain> findAll();
 
-  Strain addToUser(long userid);
+  List<StrainView> findByUserId(Long userid);
 
-  Strain update(Strain strain, long strainid);
+  Strain save(Strain strain);
 
-  void deleteUserStrain(long strainid, long userid);
+  void addToUser(Long userid, Strain strain);
+
+  Strain update(Strain strain, Long strainid);
+
+  void deleteUserStrain(Long strainid, Long userid);
 }
