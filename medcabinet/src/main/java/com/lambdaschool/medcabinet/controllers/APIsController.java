@@ -3,7 +3,6 @@ package com.lambdaschool.medcabinet.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lambdaschool.medcabinet.logging.Loggable;
-import com.lambdaschool.medcabinet.models.APIOpenLibrary;
 import com.lambdaschool.medcabinet.models.APIStrain;
 import com.lambdaschool.medcabinet.models.ResStrain;
 import org.slf4j.Logger;

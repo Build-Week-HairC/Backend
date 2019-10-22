@@ -2,8 +2,8 @@ package com.lambdaschool.medcabinet.services;
 
 import com.lambdaschool.medcabinet.exceptions.ResourceFoundException;
 import com.lambdaschool.medcabinet.exceptions.ResourceNotFoundException;
-import com.lambdaschool.medcabinet.models.Strain;
-import com.lambdaschool.medcabinet.models.User;
+import com.lambdaschool.medcabinet.models.*;
+import com.lambdaschool.medcabinet.repository.EffectRepository;
 import com.lambdaschool.medcabinet.repository.StrainRepository;
 import com.lambdaschool.medcabinet.repository.UserRepository;
 import com.lambdaschool.medcabinet.view.StrainView;
@@ -22,6 +22,9 @@ public class StrainServiceImpl implements StrainService
   @Autowired
   private UserRepository userrepos;
 
+  @Autowired
+  private EffectRepository effectrepos;
+
   @Override
   public List<Strain> findAll()
   {
@@ -37,11 +40,11 @@ public class StrainServiceImpl implements StrainService
   }
 
   @Override
-  public Strain save(Strain strain)
+  public Strain save(ResStrain strain)
   {
     Strain newStrain = new Strain();
 
-    newStrain.setStrainname(strain.getStrainname());
+    newStrain.setStrain(strain.getStrain());
     newStrain.setType(strain.getType());
     newStrain.setRating(strain.getRating());
 
@@ -50,29 +53,49 @@ public class StrainServiceImpl implements StrainService
       newStrain.setDescription(strain.getDescription());
     }
 
+//    for(Effect e : strain.getEffects())
+//    {
+//      if (effectrepos.findEffectByEffectname(e.getEffectname()) != null)
+//      {
+//        // create relationship between strain and current effect
+//        effectrepos.insertStrainEffect();
+//      } else
+//      {
+//        // add to database
+//        // create relationship between string and new effect
+//      }
+////      newStrain.getEffects().add(e);
+//    }
+
+//    for(Flavor f : strain.getFlavors())
+//    {
+//      newStrain.getFlavors().add(f);
+//    }
+
     return strainrepos.save(newStrain);
   }
 
   @Override
-  public void addToUser(Long userid, Strain strain)
+  public Strain addToUser(Long userid, ResStrain strain)
   {
-    User user = userrepos.findById(userid).orElseThrow(() -> new ResourceNotFoundException("No user with id " + userid));
+    userrepos.findById(userid).orElseThrow(() -> new ResourceNotFoundException("No user with id " + userid));
 
-    Strain currentStrain = strainrepos.findByStrainname(strain.getStrainname());
-
-//    if (currentStrain.getStrainid() != null)
-//    {
-      if (strainrepos.checkUserStrainsCombo(user.getUserid(), currentStrain.getStrainid()).getCount() <= 0)
+    if (strainrepos.findByStrain(strain.getStrain()) != null)
+    {
+      Strain currentStrain = strainrepos.findByStrain(strain.getStrain());
+      if (strainrepos.checkUserStrainsCombo(userid, currentStrain.getStrainid()).getCount() <= 0)
       {
-        strainrepos.insertUserStrain(user.getUserid(), currentStrain.getStrainid());
+        strainrepos.insertUserStrain(userid, currentStrain.getStrainid());
+        return currentStrain;
       } else
       {
-        throw new ResourceFoundException("User-strain combination already exists");
+        throw new ResourceFoundException("User has already saved this strain (User-Strain combination exists)");
       }
-//    } else {
-//      save(strain);
-//      strainrepos.insertUserStrain(user.getUserid(), strainrepos.findByStrainname(strain.getStrainname()).getStrainid());
-//    }
+    } else {
+      Strain newStrain = this.save(strain);
+      strainrepos.insertUserStrain(userid, newStrain.getStrainid());
+      return strainrepos.findByStrain(newStrain.getStrain());
+    }
   }
 
   @Override

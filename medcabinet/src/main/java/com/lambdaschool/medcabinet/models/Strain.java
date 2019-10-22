@@ -15,7 +15,7 @@ public class Strain extends Auditable
   private Long strainid;
 
   @Column(nullable = false, unique = true)
-  private String strainname;
+  private String strain;
 
   @Column(nullable = false)
   private String type;
@@ -50,9 +50,9 @@ public class Strain extends Auditable
   {
   }
 
-  public Strain(String strainname, String type, Double rating, String description)
+  public Strain(String strain, String type, Double rating, String description)
   {
-    this.strainname = strainname;
+    this.strain = strain;
     this.type = type;
     this.rating = rating;
     this.description = description;
@@ -68,14 +68,14 @@ public class Strain extends Auditable
     this.strainid = strainid;
   }
 
-  public String getStrainname()
+  public String getStrain()
   {
-    return strainname;
+    return strain;
   }
 
-  public void setStrainname(String strainname)
+  public void setStrain(String strain)
   {
-    this.strainname = strainname;
+    this.strain = strain;
   }
 
   public String getType()
@@ -141,6 +141,6 @@ public class Strain extends Auditable
   @Override
   public String toString()
   {
-    return "Strain{" + "strainid=" + strainid + ", strainname='" + strainname + '\'' + ", type='" + type + '\'' + ", rating=" + rating + ", description='" + description + '\'' + ", users=" + users + ", effects=" + effects + ", flavors=" + flavors + '}';
+    return "Strain{" + "strainid=" + strainid + ", strainname='" + strain + '\'' + ", type='" + type + '\'' + ", rating=" + rating + ", description='" + description + '\'' + ", users=" + users + ", effects=" + effects + ", flavors=" + flavors + '}';
   }
 }

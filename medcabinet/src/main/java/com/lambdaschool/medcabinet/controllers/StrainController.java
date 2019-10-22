@@ -1,6 +1,9 @@
 package com.lambdaschool.medcabinet.controllers;
 
+import com.lambdaschool.medcabinet.models.ResStrain;
 import com.lambdaschool.medcabinet.models.Strain;
+import com.lambdaschool.medcabinet.services.EffectService;
+import com.lambdaschool.medcabinet.services.FlavorService;
 import com.lambdaschool.medcabinet.services.StrainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,12 @@ public class StrainController
   @Autowired
   private StrainService strainService;
 
+  @Autowired
+  private EffectService effectService;
+
+  @Autowired
+  private FlavorService flavorService;
+
   // find all strains
   // GET -- /strains/strains
   @GetMapping(value = "/strains",
@@ -30,7 +39,7 @@ public class StrainController
   // GET -- /strains/strains/user/{userid}
   @GetMapping(value = "/strains/user/{userid}",
               produces = {"application/json"})
-  public ResponseEntity<?> findStrainsByUser(@PathVariable
+  public ResponseEntity<?> findStrainsByUserId(@PathVariable
                                                  Long userid)
   {
     return new ResponseEntity<>(strainService.findByUserId(userid), HttpStatus.OK);
@@ -45,10 +54,14 @@ public class StrainController
   public ResponseEntity<?> addStrainToUser(@PathVariable Long userid,
                                            @Valid
                                            @RequestBody
-                                               Strain strain)
+                                               ResStrain strain)
   {
-    strainService.addToUser(userid, strain);
-    return new ResponseEntity<>(HttpStatus.OK);
+    Strain newStrain = strainService.addToUser(userid, strain);
+
+    effectService.saveList(strain.getEffects(), newStrain.getStrainid());
+    flavorService.saveList(strain.getFlavors(), newStrain.getStrainid());
+
+    return new ResponseEntity<>(newStrain, HttpStatus.OK);
   }
 
   // edit strain -- TODO what fields should update?
