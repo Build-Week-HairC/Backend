@@ -1,9 +1,7 @@
 package com.lambdaschool.medcabinet.controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lambdaschool.medcabinet.logging.Loggable;
-import com.lambdaschool.medcabinet.models.APIOpenLibrary;
 import com.lambdaschool.medcabinet.models.APIStrain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This can be removed from the base application. This controller contains
@@ -38,74 +35,28 @@ import java.util.Map;
 
 @Loggable
 @RestController
-@RequestMapping("/otherapis")
+@RequestMapping("/api")
 public class APIsController
 {
     private static final Logger logger = LoggerFactory.getLogger(RolesController.class);
     private RestTemplate restTemplate = new RestTemplate();
 
-    // taken from https://openlibrary.org/dev/docs/api/books
-    // returns a list of books - you can include multiple ISBNs in a single request
-    // This API returns a map instead of the standard list
-    //
-    // localhost:2019/otherapis/openlibrary/0982477562
-
-    @GetMapping(value = "/openlibrary/{isbn}",
-                produces = {"application/json"})
-    public ResponseEntity<?> listABookGivenISBN(HttpServletRequest request,
-                                                @PathVariable
-                                                        String isbn)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
-
-        // request data from another API
-        String requestURL = "https://openlibrary.org/api/books?bibkeys=" + "ISBN:" + isbn + "&format=json";
-
-        // data comes back as a map -- must set it up as responseType
-        ParameterizedTypeReference<Map<String, APIOpenLibrary>> responseType = new ParameterizedTypeReference<Map<String, APIOpenLibrary>>()
-        {
-        };
-        ResponseEntity<Map<String, APIOpenLibrary>> responseEntity = restTemplate.exchange(requestURL,
-                                                                                           HttpMethod.GET,
-                                                                                           null,
-                                                                                           responseType);
-        // pulls data out of the response
-        Map<String, APIOpenLibrary> ourBooks = responseEntity.getBody();
-
-        System.out.println(ourBooks);
-        return new ResponseEntity<>(ourBooks,
-                                    HttpStatus.OK);
-    }
-
     @GetMapping(value = "/ds/{query}",
                 produces = {"application/json"})
-    public ResponseEntity<?> searchStrains(HttpServletRequest request,
-                                           @PathVariable String query) throws IOException
+    public ResponseEntity<?> searchStrains(HttpServletRequest request, @PathVariable String query) throws IOException
     {
         logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         // TODO -- restrict query to alphanumeric characters
-
         query = query.replaceAll("[\\s]", ",");
-
-        String requestURL = "https://morning-badlands-32563.herokuapp.com/recommend/?format=json&" + query + "=";
+        String requestURL = "https://morning-badlands-32563.herokuapp.com/recommend/?" + query;
 
         ParameterizedTypeReference<String> responseType = new ParameterizedTypeReference<>()
         {
         };
         ResponseEntity<String> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, null, responseType);
-
-        String jsonString = responseEntity.getBody();
-
-//        APIStrain[] jsonList = new ObjectMapper().readValue(jsonString, APIStrain[].class);
-
-//        List<APIStrain> jsonList = Arrays.asList(new ObjectMapper().readValue(jsonString, APIStrain.class));
-
-//        List<APIStrain> jsonList = new ObjectMapper().readValue(jsonString, new TypeReference<List<APIStrain>>() {});
-//
-//        System.out.println("\n\n" + jsonList + "\n\n");
-
+        String jsonString = responseEntity.getBody().replace("\\","").substring(1).replace("u00a0", "");
+        
         return new ResponseEntity<>(jsonString, HttpStatus.OK);
     }
 }
