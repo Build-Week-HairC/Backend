@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class APIStrain
 {
   @JsonProperty("StrainID")
-  private Integer StrainID;
+  private Long StrainID;
   @JsonProperty("Strain")
   private String Strain;
   @JsonProperty("Type")
@@ -20,11 +20,11 @@ public class APIStrain
   public APIStrain()
   {
   }
-  public Integer getStrainID()
+  public Long getStrainID()
   {
     return StrainID;
   }
-  public void setStrainID(Integer strainID)
+  public void setStrainID(Long strainID)
   {
     StrainID = strainID;
   }

@@ -10,7 +10,7 @@ public interface StrainService
 {
   List<Strain> findAll();
 
-  List<StrainView> findByUserId(Long userid);
+  List<ResStrain> findByUserId(Long userid);
 
   Strain save(ResStrain strain);
 

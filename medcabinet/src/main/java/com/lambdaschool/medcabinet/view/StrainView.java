@@ -4,7 +4,7 @@ public interface StrainView
 {
   Long getStrainid();
 
-  String getStrainname();
+  String getStrain();
 
   String getType();
 

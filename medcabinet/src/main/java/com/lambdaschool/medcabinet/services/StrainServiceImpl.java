@@ -4,6 +4,7 @@ import com.lambdaschool.medcabinet.exceptions.ResourceFoundException;
 import com.lambdaschool.medcabinet.exceptions.ResourceNotFoundException;
 import com.lambdaschool.medcabinet.models.*;
 import com.lambdaschool.medcabinet.repository.EffectRepository;
+import com.lambdaschool.medcabinet.repository.FlavorRepository;
 import com.lambdaschool.medcabinet.repository.StrainRepository;
 import com.lambdaschool.medcabinet.repository.UserRepository;
 import com.lambdaschool.medcabinet.view.StrainView;
@@ -25,6 +26,9 @@ public class StrainServiceImpl implements StrainService
   @Autowired
   private EffectRepository effectrepos;
 
+  @Autowired
+  private FlavorRepository flavorrepos;
+
   @Override
   public List<Strain> findAll()
   {
@@ -34,9 +38,34 @@ public class StrainServiceImpl implements StrainService
   }
 
   @Override
-  public List<StrainView> findByUserId(Long userid)
+  public List<ResStrain> findByUserId(Long userid)
   {
-    return strainrepos.findByUserId(userid);
+    List<StrainView> currentStrains = strainrepos.findByUserId(userid);
+
+    List<String> effects = effectrepos.findByUserId(userid);
+
+    List<String> flavors = new ArrayList<>();
+
+
+    List<ResStrain> resStrains = new ArrayList<>();
+    for(StrainView strain : currentStrains)
+    {
+      ResStrain newStrain = new ResStrain();
+      newStrain.setStrainid(strain.getStrainid());
+      newStrain.setStrain(strain.getStrain());
+      newStrain.setType(strain.getType());
+      newStrain.setRating(strain.getRating());
+      newStrain.setDescription(strain.getDescription());
+
+      for(String effect : effects)
+      {
+        newStrain.getEffects().add(effect);
+      }
+
+      resStrains.add(newStrain);
+    }
+
+    return resStrains;
   }
 
   @Override
@@ -52,25 +81,6 @@ public class StrainServiceImpl implements StrainService
     {
       newStrain.setDescription(strain.getDescription());
     }
-
-//    for(Effect e : strain.getEffects())
-//    {
-//      if (effectrepos.findEffectByEffectname(e.getEffectname()) != null)
-//      {
-//        // create relationship between strain and current effect
-//        effectrepos.insertStrainEffect();
-//      } else
-//      {
-//        // add to database
-//        // create relationship between string and new effect
-//      }
-////      newStrain.getEffects().add(e);
-//    }
-
-//    for(Flavor f : strain.getFlavors())
-//    {
-//      newStrain.getFlavors().add(f);
-//    }
 
     return strainrepos.save(newStrain);
   }
