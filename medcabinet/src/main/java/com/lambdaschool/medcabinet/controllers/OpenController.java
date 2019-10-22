@@ -132,4 +132,15 @@ public class OpenController
     {
         logger.trace("favicon.ico endpoint accessed!");
     }
+
+    private String getPort(HttpServletRequest request)
+    {
+        if (request.getServerName().equals("localhost"))
+        {
+            return ":" + request.getLocalPort();
+        } else
+        {
+            return "";
+        }
+    }
 }

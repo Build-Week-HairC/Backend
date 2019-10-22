@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Locale;
 
 // comment out these annotations in production if you don't want seed data to be loaded
-@Transactional
-@Component
+//@Transactional
+//@Component
 public class SeedData implements CommandLineRunner
 {
     @Autowired
@@ -43,6 +43,7 @@ public class SeedData implements CommandLineRunner
 //        roleService.save(r3);
 
         // admin, data, user
+        // don't reuse these arrays - recreate every time
         ArrayList<UserRoles> admins = new ArrayList<>();
         admins.add(new UserRoles(new User(),
                                  r1));

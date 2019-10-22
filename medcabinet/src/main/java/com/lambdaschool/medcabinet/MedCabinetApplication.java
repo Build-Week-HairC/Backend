@@ -1,5 +1,8 @@
 package com.lambdaschool.medcabinet;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lambdaschool.medcabinet.models.APIStrain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @EnableWebMvc
 @EnableJpaAuditing
@@ -31,7 +39,7 @@ public class MedCabinetApplication
         }
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
         checkEnvironmentVariable("OAUTHCLIENTID");
         checkEnvironmentVariable("OAUTHCLIENTSECRET");
