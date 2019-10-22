@@ -1,9 +1,9 @@
 package com.lambdaschool.medcabinet.controllers;
 
-import com.lambdaschool.medcabinet.models.Effect;
 import com.lambdaschool.medcabinet.models.ResStrain;
 import com.lambdaschool.medcabinet.models.Strain;
 import com.lambdaschool.medcabinet.services.EffectService;
+import com.lambdaschool.medcabinet.services.FlavorService;
 import com.lambdaschool.medcabinet.services.StrainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +22,9 @@ public class StrainController
 
   @Autowired
   private EffectService effectService;
+
+  @Autowired
+  private FlavorService flavorService;
 
   // find all strains
   // GET -- /strains/strains
@@ -56,6 +59,7 @@ public class StrainController
     Strain newStrain = strainService.addToUser(userid, strain);
 
     effectService.saveList(strain.getEffects(), newStrain.getStrainid());
+    flavorService.saveList(strain.getFlavors(), newStrain.getStrainid());
 
     return new ResponseEntity<>(newStrain, HttpStatus.OK);
   }

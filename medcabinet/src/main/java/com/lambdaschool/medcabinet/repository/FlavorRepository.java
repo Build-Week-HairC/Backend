@@ -1,6 +1,5 @@
 package com.lambdaschool.medcabinet.repository;
 
-import com.lambdaschool.medcabinet.models.Effect;
 import com.lambdaschool.medcabinet.models.Flavor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -3,9 +3,11 @@ package com.lambdaschool.medcabinet.services;
 import com.lambdaschool.medcabinet.models.Flavor;
 import com.lambdaschool.medcabinet.repository.FlavorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service(value = "flavorService")
 public class FlavorServiceImpl implements FlavorService
 {
   @Autowired
