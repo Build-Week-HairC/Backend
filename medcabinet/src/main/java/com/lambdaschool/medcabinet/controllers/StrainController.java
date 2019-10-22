@@ -47,8 +47,8 @@ public class StrainController
                                            @RequestBody
                                                Strain strain)
   {
-    strainService.addToUser(userid, strain);
-    return new ResponseEntity<>(HttpStatus.OK);
+    Strain newStrain = strainService.addToUser(userid, strain);
+    return new ResponseEntity<>(newStrain, HttpStatus.OK);
   }
 
   // edit strain -- TODO what fields should update?

@@ -30,7 +30,6 @@ public class SeedData implements CommandLineRunner
     @Autowired
     StrainService strainService;
 
-
     @Override
     public void run(String[] args) throws Exception
     {

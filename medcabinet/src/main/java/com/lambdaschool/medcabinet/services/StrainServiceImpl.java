@@ -66,40 +66,26 @@ public class StrainServiceImpl implements StrainService
   }
 
   @Override
-  public void addToUser(Long userid, Strain strain)
+  public Strain addToUser(Long userid, Strain strain)
   {
-    User user = userrepos.findById(userid).orElseThrow(() -> new ResourceNotFoundException("No user with id " + userid));
+    userrepos.findById(userid).orElseThrow(() -> new ResourceNotFoundException("No user with id " + userid));
 
-//    Strain currentStrain = strainrepos.findByStrain(strain.getStrain());
-
-      if (strainrepos.findByStrain(strain.getStrain()) != null)
+    if (strainrepos.findByStrain(strain.getStrain()) != null)
+    {
+      Strain currentStrain = strainrepos.findByStrain(strain.getStrain());
+      if (strainrepos.checkUserStrainsCombo(userid, currentStrain.getStrainid()).getCount() <= 0)
       {
-        Strain currentStrain = strainrepos.findByStrain(strain.getStrain());
-        if (strainrepos.checkUserStrainsCombo(user.getUserid(), currentStrain.getStrainid()).getCount() <= 0)
-        {
-          strainrepos.insertUserStrain(user.getUserid(), currentStrain.getStrainid());
-        } else
-        {
-          throw new ResourceFoundException("User has already saved this strain (User-Strain combination exists)");
-        }
-      } else {
-        save(strain);
-        strainrepos.insertUserStrain(user.getUserid(), strainrepos.findByStrain(strain.getStrain()).getStrainid());
+        strainrepos.insertUserStrain(userid, currentStrain.getStrainid());
+        return currentStrain;
+      } else
+      {
+        throw new ResourceFoundException("User has already saved this strain (User-Strain combination exists)");
       }
-
-//    if (currentStrain.getStrainid() != null)
-//    {
-//      if (strainrepos.checkUserStrainsCombo(user.getUserid(), currentStrain.getStrainid()).getCount() <= 0)
-//      {
-//        strainrepos.insertUserStrain(user.getUserid(), currentStrain.getStrainid());
-//      } else
-//      {
-//        throw new ResourceFoundException("User-strain combination already exists");
-//      }
-//    } else {
-//      save(strain);
-//      strainrepos.insertUserStrain(user.getUserid(), strainrepos.findByStrainname(strain.getStrainname()).getStrainid());
-//    }
+    } else {
+      Strain newStrain = this.save(strain);
+      strainrepos.insertUserStrain(userid, newStrain.getStrainid());
+      return strainrepos.findByStrain(newStrain.getStrain());
+    }
   }
 
   @Override

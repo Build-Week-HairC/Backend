@@ -13,7 +13,7 @@ public interface StrainService
 
   Strain save(Strain strain);
 
-  void addToUser(Long userid, Strain strain);
+  Strain addToUser(Long userid, Strain strain);
 
   Strain update(Strain strain, Long strainid);
 
