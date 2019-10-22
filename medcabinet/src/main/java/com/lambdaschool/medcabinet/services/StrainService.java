@@ -1,5 +1,6 @@
 package com.lambdaschool.medcabinet.services;
 
+import com.lambdaschool.medcabinet.models.ResStrain;
 import com.lambdaschool.medcabinet.models.Strain;
 import com.lambdaschool.medcabinet.view.StrainView;
 
@@ -11,9 +12,9 @@ public interface StrainService
 
   List<StrainView> findByUserId(Long userid);
 
-  Strain save(Strain strain);
+  Strain save(ResStrain strain);
 
-  Strain addToUser(Long userid, Strain strain);
+  Strain addToUser(Long userid, ResStrain strain);
 
   Strain update(Strain strain, Long strainid);
 

@@ -26,6 +26,14 @@ public class ResStrain
     this.description = description;
   }
 
+  public ResStrain(String strain, String type, Double rating, String description)
+  {
+    this.strain = strain;
+    this.type = type;
+    this.rating = rating;
+    this.description = description;
+  }
+
   public Integer getStrainid()
   {
     return strainid;

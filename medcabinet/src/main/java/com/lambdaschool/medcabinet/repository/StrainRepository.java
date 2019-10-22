@@ -29,4 +29,6 @@ public interface StrainRepository extends CrudRepository<Strain, Long>
          nativeQuery = true)
   void insertUserStrain(long userid,
                    long strainid);
+
+
 }
