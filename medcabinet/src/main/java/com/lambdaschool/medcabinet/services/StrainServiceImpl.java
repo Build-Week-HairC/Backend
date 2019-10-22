@@ -2,6 +2,8 @@ package com.lambdaschool.medcabinet.services;
 
 import com.lambdaschool.medcabinet.exceptions.ResourceFoundException;
 import com.lambdaschool.medcabinet.exceptions.ResourceNotFoundException;
+import com.lambdaschool.medcabinet.models.Effect;
+import com.lambdaschool.medcabinet.models.Flavor;
 import com.lambdaschool.medcabinet.models.Strain;
 import com.lambdaschool.medcabinet.models.User;
 import com.lambdaschool.medcabinet.repository.StrainRepository;
@@ -41,13 +43,23 @@ public class StrainServiceImpl implements StrainService
   {
     Strain newStrain = new Strain();
 
-    newStrain.setStrainname(strain.getStrainname());
+    newStrain.setStrain(strain.getStrain());
     newStrain.setType(strain.getType());
     newStrain.setRating(strain.getRating());
 
     if (strain.getDescription() != null)
     {
       newStrain.setDescription(strain.getDescription());
+    }
+
+    for(Effect e : strain.getEffects())
+    {
+      newStrain.getEffects().add(e);
+    }
+
+    for(Flavor f : strain.getFlavors())
+    {
+      newStrain.getFlavors().add(f);
     }
 
     return strainrepos.save(newStrain);
@@ -58,17 +70,32 @@ public class StrainServiceImpl implements StrainService
   {
     User user = userrepos.findById(userid).orElseThrow(() -> new ResourceNotFoundException("No user with id " + userid));
 
-    Strain currentStrain = strainrepos.findByStrainname(strain.getStrainname());
+//    Strain currentStrain = strainrepos.findByStrain(strain.getStrain());
+
+      if (strainrepos.findByStrain(strain.getStrain()) != null)
+      {
+        Strain currentStrain = strainrepos.findByStrain(strain.getStrain());
+        if (strainrepos.checkUserStrainsCombo(user.getUserid(), currentStrain.getStrainid()).getCount() <= 0)
+        {
+          strainrepos.insertUserStrain(user.getUserid(), currentStrain.getStrainid());
+        } else
+        {
+          throw new ResourceFoundException("User has already saved this strain (User-Strain combination exists)");
+        }
+      } else {
+        save(strain);
+        strainrepos.insertUserStrain(user.getUserid(), strainrepos.findByStrain(strain.getStrain()).getStrainid());
+      }
 
 //    if (currentStrain.getStrainid() != null)
 //    {
-      if (strainrepos.checkUserStrainsCombo(user.getUserid(), currentStrain.getStrainid()).getCount() <= 0)
-      {
-        strainrepos.insertUserStrain(user.getUserid(), currentStrain.getStrainid());
-      } else
-      {
-        throw new ResourceFoundException("User-strain combination already exists");
-      }
+//      if (strainrepos.checkUserStrainsCombo(user.getUserid(), currentStrain.getStrainid()).getCount() <= 0)
+//      {
+//        strainrepos.insertUserStrain(user.getUserid(), currentStrain.getStrainid());
+//      } else
+//      {
+//        throw new ResourceFoundException("User-strain combination already exists");
+//      }
 //    } else {
 //      save(strain);
 //      strainrepos.insertUserStrain(user.getUserid(), strainrepos.findByStrainname(strain.getStrainname()).getStrainid());

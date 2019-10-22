@@ -30,7 +30,7 @@ public class StrainController
   // GET -- /strains/strains/user/{userid}
   @GetMapping(value = "/strains/user/{userid}",
               produces = {"application/json"})
-  public ResponseEntity<?> findStrainsByUser(@PathVariable
+  public ResponseEntity<?> findStrainsByUserId(@PathVariable
                                                  Long userid)
   {
     return new ResponseEntity<>(strainService.findByUserId(userid), HttpStatus.OK);

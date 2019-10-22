@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Locale;
 
 // comment out these annotations in production if you don't want seed data to be loaded
-//@Transactional
-//@Component
+@Transactional
+@Component
 public class SeedData implements CommandLineRunner
 {
     @Autowired
