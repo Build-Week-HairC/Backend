@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserDetailsService,
                                                                       user.getAuthority());
     }
 
+    @Override
     public User findUserById(long id) throws ResourceNotFoundException
     {
         return userrepos.findById(id)

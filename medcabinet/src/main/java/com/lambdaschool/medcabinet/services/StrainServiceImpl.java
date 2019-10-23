@@ -4,6 +4,7 @@ import com.lambdaschool.medcabinet.exceptions.ResourceFoundException;
 import com.lambdaschool.medcabinet.exceptions.ResourceNotFoundException;
 import com.lambdaschool.medcabinet.models.*;
 import com.lambdaschool.medcabinet.repository.EffectRepository;
+import com.lambdaschool.medcabinet.repository.FlavorRepository;
 import com.lambdaschool.medcabinet.repository.StrainRepository;
 import com.lambdaschool.medcabinet.repository.UserRepository;
 import com.lambdaschool.medcabinet.view.StrainView;
@@ -25,6 +26,9 @@ public class StrainServiceImpl implements StrainService
   @Autowired
   private EffectRepository effectrepos;
 
+  @Autowired
+  private FlavorRepository flavorrepos;
+
   @Override
   public List<Strain> findAll()
   {
@@ -34,9 +38,37 @@ public class StrainServiceImpl implements StrainService
   }
 
   @Override
-  public List<StrainView> findByUserId(Long userid)
+  public List<ResStrain> findByUserId(Long userid)
   {
-    return strainrepos.findByUserId(userid);
+    List<StrainView> currentStrains = strainrepos.findByUserId(userid);
+
+    List<String> effects = effectrepos.findByUserId(userid);
+
+    System.out.println(effects);
+
+    List<String> flavors = new ArrayList<>();
+
+
+    List<ResStrain> resStrains = new ArrayList<>();
+    for(StrainView strain : currentStrains)
+    {
+      ResStrain newStrain = new ResStrain();
+      newStrain.setStrainid(strain.getStrainid());
+      newStrain.setStrain(strain.getStrain());
+      newStrain.setType(strain.getType());
+      newStrain.setRating(strain.getRating());
+      newStrain.setDescription(strain.getDescription());
+
+      for(String effect : effects)
+      {
+        System.out.println(effect);
+        newStrain.getEffects().add(effect);
+      }
+
+      resStrains.add(newStrain);
+    }
+
+    return resStrains;
   }
 
   @Override
@@ -47,45 +79,22 @@ public class StrainServiceImpl implements StrainService
     newStrain.setStrain(strain.getStrain());
     newStrain.setType(strain.getType());
     newStrain.setRating(strain.getRating());
-
-    if (strain.getDescription() != null)
-    {
-      newStrain.setDescription(strain.getDescription());
-    }
-
-//    for(Effect e : strain.getEffects())
-//    {
-//      if (effectrepos.findEffectByEffectname(e.getEffectname()) != null)
-//      {
-//        // create relationship between strain and current effect
-//        effectrepos.insertStrainEffect();
-//      } else
-//      {
-//        // add to database
-//        // create relationship between string and new effect
-//      }
-////      newStrain.getEffects().add(e);
-//    }
-
-//    for(Flavor f : strain.getFlavors())
-//    {
-//      newStrain.getFlavors().add(f);
-//    }
+    newStrain.setDescription(strain.getDescription());
 
     return strainrepos.save(newStrain);
   }
 
   @Override
-  public Strain addToUser(Long userid, ResStrain strain)
+  public Strain addToUser(String username, ResStrain strain)
   {
-    userrepos.findById(userid).orElseThrow(() -> new ResourceNotFoundException("No user with id " + userid));
+    User currentUser = userrepos.findByUsername(username);
 
     if (strainrepos.findByStrain(strain.getStrain()) != null)
     {
       Strain currentStrain = strainrepos.findByStrain(strain.getStrain());
-      if (strainrepos.checkUserStrainsCombo(userid, currentStrain.getStrainid()).getCount() <= 0)
+      if (strainrepos.checkUserStrainsCombo(currentUser.getUserid(), currentStrain.getStrainid()).getCount() <= 0)
       {
-        strainrepos.insertUserStrain(userid, currentStrain.getStrainid());
+        strainrepos.insertUserStrain(currentUser.getUserid(), currentStrain.getStrainid());
         return currentStrain;
       } else
       {
@@ -93,7 +102,7 @@ public class StrainServiceImpl implements StrainService
       }
     } else {
       Strain newStrain = this.save(strain);
-      strainrepos.insertUserStrain(userid, newStrain.getStrainid());
+      strainrepos.insertUserStrain(currentUser.getUserid(), newStrain.getStrainid());
       return strainrepos.findByStrain(newStrain.getStrain());
     }
   }

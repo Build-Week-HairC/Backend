@@ -78,7 +78,7 @@ public class OpenController
 
         // set the location header for the newly created resource - to another controller!
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}")
+        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() +  getPort(httpServletRequest) + "/users/user/{userId}")
                                                     .buildAndExpand(newuser.getUserid())
                                                     .toUri();
         responseHeaders.setLocation(newUserURI);
@@ -90,7 +90,7 @@ public class OpenController
         {
             // return the access token
             RestTemplate restTemplate = new RestTemplate();
-            String requestURI = "http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/login";
+            String requestURI = "http://" + httpServletRequest.getServerName() + getPort(httpServletRequest) + "/login";
 
             List<MediaType> acceptableMediaTypes = new ArrayList<>();
             acceptableMediaTypes.add(MediaType.APPLICATION_JSON);

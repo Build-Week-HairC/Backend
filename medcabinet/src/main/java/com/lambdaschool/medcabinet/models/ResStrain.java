@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ResStrain
 {
-  private Integer strainid;
+  private Long strainid;
   private String strain;
   private String type;
   private Double rating;
@@ -17,7 +17,7 @@ public class ResStrain
   {
   }
 
-  public ResStrain(Integer strainid, String strain, String type, Double rating, String description)
+  public ResStrain(Long strainid, String strain, String type, Double rating, String description)
   {
     this.strainid = strainid;
     this.strain = strain;
@@ -34,12 +34,12 @@ public class ResStrain
     this.description = description;
   }
 
-  public Integer getStrainid()
+  public Long getStrainid()
   {
     return strainid;
   }
 
-  public void setStrainid(Integer strainid)
+  public void setStrainid(Long strainid)
   {
     this.strainid = strainid;
   }
@@ -104,9 +104,9 @@ public class ResStrain
     this.description = description;
   }
 
-  @Override
-  public String toString()
-  {
-    return "ResStrain{" + "strainid=" + strainid + ", strain='" + strain + '\'' + ", type='" + type + '\'' + ", rating=" + rating + ", effects=" + effects + ", flavors=" + flavors + ", description='" + description + '\'' + '}';
-  }
+//  @Override
+//  public String toString()
+//  {
+//    return "ResStrain{" + "strainid=" + strainid + ", strain='" + strain + '\'' + ", type='" + type + '\'' + ", rating=" + rating + ", effects=" + effects + ", flavors=" + flavors + ", description='" + description + '\'' + '}';
+//  }
 }

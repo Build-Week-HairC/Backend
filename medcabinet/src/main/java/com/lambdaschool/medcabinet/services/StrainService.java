@@ -10,11 +10,11 @@ public interface StrainService
 {
   List<Strain> findAll();
 
-  List<StrainView> findByUserId(Long userid);
+  List<ResStrain> findByUserId(Long userid);
 
   Strain save(ResStrain strain);
 
-  Strain addToUser(Long userid, ResStrain strain);
+  Strain addToUser(String username, ResStrain strain);
 
   Strain update(Strain strain, Long strainid);
 
