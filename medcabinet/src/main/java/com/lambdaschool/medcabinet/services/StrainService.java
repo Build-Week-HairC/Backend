@@ -12,6 +12,8 @@ public interface StrainService
 
   List<ResStrain> findByUsername(String username);
 
+  Strain findById(Long strainid);
+
   Strain save(ResStrain strain);
 
   Strain addToUser(String username, ResStrain strain);

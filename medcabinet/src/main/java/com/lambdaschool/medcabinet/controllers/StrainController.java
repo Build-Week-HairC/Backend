@@ -61,7 +61,7 @@ public class StrainController
     effectService.saveList(strain.getEffects(), newStrain.getStrainid());
     flavorService.saveList(strain.getFlavors(), newStrain.getStrainid());
 
-    return new ResponseEntity<>(newStrain, HttpStatus.OK);
+    return new ResponseEntity<>(strainService.findById(newStrain.getStrainid()), HttpStatus.OK);
   }
 
   // edit strain -- TODO what fields should update?

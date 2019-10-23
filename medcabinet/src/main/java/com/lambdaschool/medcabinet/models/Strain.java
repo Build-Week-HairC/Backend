@@ -23,6 +23,7 @@ public class Strain extends Auditable
   @Column(nullable = false)
   private double rating;
 
+  @Column(length = 1000)
   private String description;
 
   @ManyToMany

@@ -7,6 +7,7 @@ import com.lambdaschool.medcabinet.repository.EffectRepository;
 import com.lambdaschool.medcabinet.repository.FlavorRepository;
 import com.lambdaschool.medcabinet.repository.StrainRepository;
 import com.lambdaschool.medcabinet.repository.UserRepository;
+import com.lambdaschool.medcabinet.view.EffectName;
 import com.lambdaschool.medcabinet.view.StrainView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,11 +44,10 @@ public class StrainServiceImpl implements StrainService
     User currentUser = userrepos.findByUsername(username);
     List<StrainView> currentStrains = strainrepos.findByUserId(currentUser.getUserid());
 
-    List<String> effects = effectrepos.findByUserId(currentUser.getUserid());
+//    List<EffectName> effects = effectrepos.findByUserId(currentUser.getUserid());
 
-    System.out.println(effects);
+//    List<String> flavors = new ArrayList<>();
 
-    List<String> flavors = new ArrayList<>();
 
 
     List<ResStrain> resStrains = new ArrayList<>();
@@ -60,16 +60,24 @@ public class StrainServiceImpl implements StrainService
       newStrain.setRating(strain.getRating());
       newStrain.setDescription(strain.getDescription());
 
-      for(String effect : effects)
+//      System.out.println("\n\nSize of effects: " + effectrepos.findByUserId(currentUser.getUserid()).size() + "\n");
+
+      for(EffectName e : effectrepos.findByStrainId(strain.getStrainid()))
       {
-        System.out.println(effect);
-        newStrain.getEffects().add(effect);
+        System.out.println(e.getEffectname());
+        newStrain.getEffects().add(e.getEffectname());
       }
 
       resStrains.add(newStrain);
     }
 
     return resStrains;
+  }
+
+  @Override
+  public Strain findById(Long strainid)
+  {
+    return strainrepos.findById(strainid).orElseThrow(() -> new ResourceNotFoundException("Strain not found"));
   }
 
   @Override
