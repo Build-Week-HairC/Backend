@@ -58,7 +58,7 @@ public class StrainController
                                                ResStrain strain)
   {
     Strain newStrain = strainService.addToUser(authentication.getName(), strain);
-//
+
     effectService.saveList(strain.getEffects(), newStrain.getStrainid());
     flavorService.saveList(strain.getFlavors(), newStrain.getStrainid());
 
