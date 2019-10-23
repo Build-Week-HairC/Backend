@@ -49,6 +49,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter
             // restrict based on HttpMethod and endpoint
             // .antMatchers(HttpMethod.GET, "/users/user/**").hasAnyRole("USER")
             .antMatchers(HttpMethod.POST, "/strains/**").hasAnyRole("USER")
+            .antMatchers("/strains/strains/user").hasAnyRole("USER")
             .antMatchers("/roles/**",
                          "/actuator/**")
             .hasAnyRole("ADMIN")

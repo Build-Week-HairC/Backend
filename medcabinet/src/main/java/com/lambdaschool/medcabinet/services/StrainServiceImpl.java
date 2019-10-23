@@ -38,11 +38,12 @@ public class StrainServiceImpl implements StrainService
   }
 
   @Override
-  public List<ResStrain> findByUserId(Long userid)
+  public List<ResStrain> findByUsername(String username)
   {
-    List<StrainView> currentStrains = strainrepos.findByUserId(userid);
+    User currentUser = userrepos.findByUsername(username);
+    List<StrainView> currentStrains = strainrepos.findByUserId(currentUser.getUserid());
 
-    List<String> effects = effectrepos.findByUserId(userid);
+    List<String> effects = effectrepos.findByUserId(currentUser.getUserid());
 
     System.out.println(effects);
 

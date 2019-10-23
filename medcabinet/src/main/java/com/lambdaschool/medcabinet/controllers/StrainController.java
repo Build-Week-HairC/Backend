@@ -28,22 +28,21 @@ public class StrainController
   private FlavorService flavorService;
 
   // find all strains
-  // GET -- /strains/strains
-  @GetMapping(value = "/strains",
+  // GET -- /strains/strains/all
+  @GetMapping(value = "/strains/all",
               produces = {"application/json"})
   public ResponseEntity<?> listAllStrains()
   {
     return new ResponseEntity<>(strainService.findAll(), HttpStatus.OK);
   }
 
-  // find strains by user id
-  // GET -- /strains/strains/user/{userid}
-  @GetMapping(value = "/strains/user/{userid}",
+  // find strains by user
+  // GET -- /strains/strains
+  @GetMapping(value = "/strains/user",
               produces = {"application/json"})
-  public ResponseEntity<?> findStrainsByUserId(@PathVariable
-                                                 Long userid)
+  public ResponseEntity<?> findStrainsByUser(Authentication authentication)
   {
-    return new ResponseEntity<>(strainService.findByUserId(userid), HttpStatus.OK);
+    return new ResponseEntity<>(strainService.findByUsername(authentication.getName()), HttpStatus.OK);
   }
 
   // add a strain to a user by user id
@@ -67,13 +66,13 @@ public class StrainController
 
   // edit strain -- TODO what fields should update?
   // PUT -- /strains/strain/{strainid}
-  @PutMapping(value = "/user/{userid}",
-               consumes = {"application/json"},
-               produces = {"application/json"})
-  public ResponseEntity<?> editStrain(@PathVariable Long userid)
-  {
-    return new ResponseEntity<>(HttpStatus.OK);
-  }
+//  @PutMapping(value = "/user/{userid}",
+//               consumes = {"application/json"},
+//               produces = {"application/json"})
+//  public ResponseEntity<?> editStrain(@PathVariable Long userid)
+//  {
+//    return new ResponseEntity<>(HttpStatus.OK);
+//  }
 
   // delete strain from user using ids
   // does not delete strain from database if it belongs to other users
