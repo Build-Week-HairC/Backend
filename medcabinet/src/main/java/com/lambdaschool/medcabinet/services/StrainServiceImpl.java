@@ -144,6 +144,9 @@ public class StrainServiceImpl implements StrainService
     Long userid = userrepos.findByUsername(username).getUserid();
     Long strainid = strainrepos.findByStrain(strainname).getStrainid();
 
+    System.out.println("user id: " + userid);
+    System.out.println("strain id: " + strainid);
+    
     if (strainrepos.checkUserStrainsCombo(userid, strainid).getCount() > 0)
     {
       strainrepos.deleteUserStrain(userid, strainid);

@@ -30,5 +30,10 @@ public interface StrainRepository extends CrudRepository<Strain, Long>
   void insertUserStrain(long userid,
                    long strainid);
 
-
+  @Transactional
+  @Modifying
+  @Query(value = "DELETE FROM userstrains WHERE userid = :userid AND strainid = :strainid",
+         nativeQuery = true)
+  void deleteUserStrain(Long userid,
+                       Long strainid);
 }
