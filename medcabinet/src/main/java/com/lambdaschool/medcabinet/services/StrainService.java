@@ -20,5 +20,5 @@ public interface StrainService
 
   Strain update(Strain strain, Long strainid);
 
-  void deleteUserStrain(Long strainid, Long userid);
+  void deleteUserStrain(String username, String strainname);
 }

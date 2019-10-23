@@ -47,7 +47,7 @@ public class StrainController
 
   // add a strain to a user by user id
   // if the strain is not in the database, adds it
-  // POST -- /strains/strain/user/{userid}
+  // POST -- /strains/strain
   @PostMapping(value = "/strain",
                consumes = {"application/json"},
                produces = {"application/json"})
@@ -74,13 +74,15 @@ public class StrainController
 //    return new ResponseEntity<>(HttpStatus.OK);
 //  }
 
-  // delete strain from user using ids
+  // delete strain from user
   // does not delete strain from database if it belongs to other users
-  // DELETE -- /strains/strain/{strainid}/user/{userid}
-  @DeleteMapping(value = "/strain/{strainid}/user/{userid}",
+  // DELETE -- /strains/strain/
+  @DeleteMapping(value = "/strain",
               produces = {"application/json"})
-  public ResponseEntity<?> findStrainsByUser(@PathVariable Long strainid, @PathVariable Long userid)
+  public ResponseEntity<?> deleteStrainFromUser(Authentication authentication,
+                                                @RequestBody ResStrain strain)
   {
+    strainService.deleteUserStrain(authentication.getName(), strain.getStrain());
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }

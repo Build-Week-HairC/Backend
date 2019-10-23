@@ -139,8 +139,18 @@ public class StrainServiceImpl implements StrainService
   }
 
   @Override
-  public void deleteUserStrain(Long strainid, Long userid)
+  public void deleteUserStrain(String username, String strainname)
   {
+    Long userid = userrepos.findByUsername(username).getUserid();
+    Long strainid = strainrepos.findByStrain(strainname).getStrainid();
 
+    if (strainrepos.checkUserStrainsCombo(userid, strainid).getCount() > 0)
+    {
+      strainrepos.deleteUserStrain(userid, strainid);
+    }
+    else
+    {
+      throw new ResourceNotFoundException("User does not have this strain (User-Strain combination not found)");
+    }
   }
 }
