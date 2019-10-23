@@ -8,6 +8,7 @@ import com.lambdaschool.medcabinet.repository.FlavorRepository;
 import com.lambdaschool.medcabinet.repository.StrainRepository;
 import com.lambdaschool.medcabinet.repository.UserRepository;
 import com.lambdaschool.medcabinet.view.EffectName;
+import com.lambdaschool.medcabinet.view.FlavorName;
 import com.lambdaschool.medcabinet.view.StrainView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,12 +45,6 @@ public class StrainServiceImpl implements StrainService
     User currentUser = userrepos.findByUsername(username);
     List<StrainView> currentStrains = strainrepos.findByUserId(currentUser.getUserid());
 
-//    List<EffectName> effects = effectrepos.findByUserId(currentUser.getUserid());
-
-//    List<String> flavors = new ArrayList<>();
-
-
-
     List<ResStrain> resStrains = new ArrayList<>();
     for(StrainView strain : currentStrains)
     {
@@ -60,12 +55,14 @@ public class StrainServiceImpl implements StrainService
       newStrain.setRating(strain.getRating());
       newStrain.setDescription(strain.getDescription());
 
-//      System.out.println("\n\nSize of effects: " + effectrepos.findByUserId(currentUser.getUserid()).size() + "\n");
-
       for(EffectName e : effectrepos.findByStrainId(strain.getStrainid()))
       {
-        System.out.println(e.getEffectname());
         newStrain.getEffects().add(e.getEffectname());
+      }
+
+      for(FlavorName f : flavorrepos.findByStrainId(strain.getStrainid()))
+      {
+        newStrain.getFlavors().add(f.getFlavorname());
       }
 
       resStrains.add(newStrain);

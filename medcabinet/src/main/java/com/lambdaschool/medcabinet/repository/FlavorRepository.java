@@ -1,10 +1,13 @@
 package com.lambdaschool.medcabinet.repository;
 
 import com.lambdaschool.medcabinet.models.Flavor;
+import com.lambdaschool.medcabinet.view.FlavorName;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public interface FlavorRepository extends CrudRepository<Flavor, Long>
 {
@@ -16,4 +19,8 @@ public interface FlavorRepository extends CrudRepository<Flavor, Long>
          nativeQuery = true)
   void insertStrainFlavor(long strainid,
                           long flavorid);
+
+  @Query(value = "SELECT f.flavorname as flavorname FROM flavors f JOIN strainflavors sf ON f.flavorid = sf.flavorid WHERE sf.strainid = :strainid",
+         nativeQuery = true)
+  List<FlavorName> findByStrainId(Long strainid);
 }
