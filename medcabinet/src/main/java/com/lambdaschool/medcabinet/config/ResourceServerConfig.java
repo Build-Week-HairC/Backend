@@ -1,6 +1,7 @@
 package com.lambdaschool.medcabinet.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -47,6 +48,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter
             //
             // restrict based on HttpMethod and endpoint
             // .antMatchers(HttpMethod.GET, "/users/user/**").hasAnyRole("USER")
+            .antMatchers(HttpMethod.POST, "/strains/**").hasAnyRole("USER")
             .antMatchers("/roles/**",
                          "/actuator/**")
             .hasAnyRole("ADMIN")

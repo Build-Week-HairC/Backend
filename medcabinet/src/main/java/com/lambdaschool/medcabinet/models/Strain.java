@@ -138,9 +138,9 @@ public class Strain extends Auditable
     this.flavors = flavors;
   }
 
-  @Override
-  public String toString()
-  {
-    return "Strain{" + "strainid=" + strainid + ", strainname='" + strain + '\'' + ", type='" + type + '\'' + ", rating=" + rating + ", description='" + description + '\'' + ", users=" + users + ", effects=" + effects + ", flavors=" + flavors + '}';
-  }
+//  @Override
+//  public String toString()
+//  {
+//    return "Strain{" + "strainid=" + strainid + ", strainname='" + strain + '\'' + ", type='" + type + '\'' + ", rating=" + rating + ", description='" + description + '\'' + ", users=" + users + ", effects=" + effects + ", flavors=" + flavors + '}';
+//  }
 }

@@ -14,7 +14,7 @@ public interface StrainService
 
   Strain save(ResStrain strain);
 
-  Strain addToUser(Long userid, ResStrain strain);
+  Strain addToUser(String username, ResStrain strain);
 
   Strain update(Strain strain, Long strainid);
 

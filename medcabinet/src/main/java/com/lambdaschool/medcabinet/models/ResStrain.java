@@ -104,9 +104,9 @@ public class ResStrain
     this.description = description;
   }
 
-  @Override
-  public String toString()
-  {
-    return "ResStrain{" + "strainid=" + strainid + ", strain='" + strain + '\'' + ", type='" + type + '\'' + ", rating=" + rating + ", effects=" + effects + ", flavors=" + flavors + ", description='" + description + '\'' + '}';
-  }
+//  @Override
+//  public String toString()
+//  {
+//    return "ResStrain{" + "strainid=" + strainid + ", strain='" + strain + '\'' + ", type='" + type + '\'' + ", rating=" + rating + ", effects=" + effects + ", flavors=" + flavors + ", description='" + description + '\'' + '}';
+//  }
 }

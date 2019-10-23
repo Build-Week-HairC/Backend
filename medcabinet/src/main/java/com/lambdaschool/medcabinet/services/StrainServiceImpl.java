@@ -44,6 +44,8 @@ public class StrainServiceImpl implements StrainService
 
     List<String> effects = effectrepos.findByUserId(userid);
 
+    System.out.println(effects);
+
     List<String> flavors = new ArrayList<>();
 
 
@@ -59,6 +61,7 @@ public class StrainServiceImpl implements StrainService
 
       for(String effect : effects)
       {
+        System.out.println(effect);
         newStrain.getEffects().add(effect);
       }
 
@@ -76,26 +79,22 @@ public class StrainServiceImpl implements StrainService
     newStrain.setStrain(strain.getStrain());
     newStrain.setType(strain.getType());
     newStrain.setRating(strain.getRating());
-
-    if (strain.getDescription() != null)
-    {
-      newStrain.setDescription(strain.getDescription());
-    }
+    newStrain.setDescription(strain.getDescription());
 
     return strainrepos.save(newStrain);
   }
 
   @Override
-  public Strain addToUser(Long userid, ResStrain strain)
+  public Strain addToUser(String username, ResStrain strain)
   {
-    userrepos.findById(userid).orElseThrow(() -> new ResourceNotFoundException("No user with id " + userid));
+    User currentUser = userrepos.findByUsername(username);
 
     if (strainrepos.findByStrain(strain.getStrain()) != null)
     {
       Strain currentStrain = strainrepos.findByStrain(strain.getStrain());
-      if (strainrepos.checkUserStrainsCombo(userid, currentStrain.getStrainid()).getCount() <= 0)
+      if (strainrepos.checkUserStrainsCombo(currentUser.getUserid(), currentStrain.getStrainid()).getCount() <= 0)
       {
-        strainrepos.insertUserStrain(userid, currentStrain.getStrainid());
+        strainrepos.insertUserStrain(currentUser.getUserid(), currentStrain.getStrainid());
         return currentStrain;
       } else
       {
@@ -103,7 +102,7 @@ public class StrainServiceImpl implements StrainService
       }
     } else {
       Strain newStrain = this.save(strain);
-      strainrepos.insertUserStrain(userid, newStrain.getStrainid());
+      strainrepos.insertUserStrain(currentUser.getUserid(), newStrain.getStrainid());
       return strainrepos.findByStrain(newStrain.getStrain());
     }
   }
