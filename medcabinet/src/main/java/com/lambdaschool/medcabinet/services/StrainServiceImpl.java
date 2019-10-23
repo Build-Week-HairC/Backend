@@ -72,9 +72,28 @@ public class StrainServiceImpl implements StrainService
   }
 
   @Override
-  public Strain findById(Long strainid)
+  public ResStrain findById(Long strainid)
   {
-    return strainrepos.findById(strainid).orElseThrow(() -> new ResourceNotFoundException("Strain not found"));
+    Strain currentStrain = strainrepos.findById(strainid).orElseThrow(() -> new ResourceNotFoundException("Strain not found"));
+
+    ResStrain rtnStrain = new ResStrain();
+    rtnStrain.setStrainid(currentStrain.getStrainid());
+    rtnStrain.setStrain(currentStrain.getStrain());
+    rtnStrain.setType(currentStrain.getType());
+    rtnStrain.setRating(currentStrain.getRating());
+    rtnStrain.setDescription(currentStrain.getDescription());
+
+    for(EffectName e : effectrepos.findByStrainId(currentStrain.getStrainid()))
+    {
+      rtnStrain.getEffects().add(e.getEffectname());
+    }
+
+    for(FlavorName f : flavorrepos.findByStrainId(currentStrain.getStrainid()))
+    {
+      rtnStrain.getFlavors().add(f.getFlavorname());
+    }
+
+    return rtnStrain;
   }
 
   @Override

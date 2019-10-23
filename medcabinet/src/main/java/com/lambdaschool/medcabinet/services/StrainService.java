@@ -12,7 +12,7 @@ public interface StrainService
 
   List<ResStrain> findByUsername(String username);
 
-  Strain findById(Long strainid);
+  ResStrain findById(Long strainid);
 
   Strain save(ResStrain strain);
 
