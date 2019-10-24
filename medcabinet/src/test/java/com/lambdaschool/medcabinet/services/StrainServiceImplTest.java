@@ -49,7 +49,9 @@ public class StrainServiceImplTest
   @Test
   public void B_findByUsername()
   {
-    assertEquals(2, strainService.findByUsername("admin").size());
+    assertEquals(1, strainService.findByUsername("admin").size());
+    assertEquals(3, strainService.findByUsername("admin").get(0).getEffects().size());
+    assertEquals(2, strainService.findByUsername("admin").get(0).getFlavors().size());
   }
 
   @Test
