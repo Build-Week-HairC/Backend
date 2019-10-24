@@ -18,7 +18,7 @@ public interface StrainService
 
   Strain addToUser(String username, ResStrain strain);
 
-  Strain update(Strain strain, Long strainid);
+//  Strain update(Strain strain, Long strainid);
 
   void deleteUserStrain(String username, String strainname);
 }

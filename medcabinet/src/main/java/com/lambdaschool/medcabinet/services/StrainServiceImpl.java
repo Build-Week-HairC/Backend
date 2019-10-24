@@ -120,7 +120,7 @@ public class StrainServiceImpl implements StrainService
       if (strainrepos.checkUserStrainsCombo(currentUser.getUserid(), currentStrain.getStrainid()).getCount() <= 0)
       {
         strainrepos.insertUserStrain(currentUser.getUserid(), currentStrain.getStrainid());
-        return currentStrain;
+        return strainrepos.findByStrain(currentStrain.getStrain());
       } else
       {
         throw new ResourceFoundException("User has already saved this strain (User-Strain combination exists)");
@@ -132,11 +132,11 @@ public class StrainServiceImpl implements StrainService
     }
   }
 
-  @Override
-  public Strain update(Strain strain, Long strainid)
-  {
-    return null;
-  }
+//  @Override
+//  public Strain update(Strain strain, Long strainid)
+//  {
+//    return null;
+//  }
 
   @Override
   public void deleteUserStrain(String username, String strainname)
