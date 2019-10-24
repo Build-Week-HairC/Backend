@@ -7,6 +7,8 @@ import com.lambdaschool.medcabinet.repository.EffectRepository;
 import com.lambdaschool.medcabinet.repository.FlavorRepository;
 import com.lambdaschool.medcabinet.repository.StrainRepository;
 import com.lambdaschool.medcabinet.repository.UserRepository;
+import com.lambdaschool.medcabinet.view.EffectName;
+import com.lambdaschool.medcabinet.view.FlavorName;
 import com.lambdaschool.medcabinet.view.StrainView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,16 +40,10 @@ public class StrainServiceImpl implements StrainService
   }
 
   @Override
-  public List<ResStrain> findByUserId(Long userid)
+  public List<ResStrain> findByUsername(String username)
   {
-    List<StrainView> currentStrains = strainrepos.findByUserId(userid);
-
-    List<String> effects = effectrepos.findByUserId(userid);
-
-    System.out.println(effects);
-
-    List<String> flavors = new ArrayList<>();
-
+    User currentUser = userrepos.findByUsername(username);
+    List<StrainView> currentStrains = strainrepos.findByUserId(currentUser.getUserid());
 
     List<ResStrain> resStrains = new ArrayList<>();
     for(StrainView strain : currentStrains)
@@ -59,16 +55,45 @@ public class StrainServiceImpl implements StrainService
       newStrain.setRating(strain.getRating());
       newStrain.setDescription(strain.getDescription());
 
-      for(String effect : effects)
+      for(EffectName e : effectrepos.findByStrainId(strain.getStrainid()))
       {
-        System.out.println(effect);
-        newStrain.getEffects().add(effect);
+        newStrain.getEffects().add(e.getEffectname());
+      }
+
+      for(FlavorName f : flavorrepos.findByStrainId(strain.getStrainid()))
+      {
+        newStrain.getFlavors().add(f.getFlavorname());
       }
 
       resStrains.add(newStrain);
     }
 
     return resStrains;
+  }
+
+  @Override
+  public ResStrain findById(Long strainid)
+  {
+    Strain currentStrain = strainrepos.findById(strainid).orElseThrow(() -> new ResourceNotFoundException("Strain not found"));
+
+    ResStrain rtnStrain = new ResStrain();
+    rtnStrain.setStrainid(currentStrain.getStrainid());
+    rtnStrain.setStrain(currentStrain.getStrain());
+    rtnStrain.setType(currentStrain.getType());
+    rtnStrain.setRating(currentStrain.getRating());
+    rtnStrain.setDescription(currentStrain.getDescription());
+
+    for(EffectName e : effectrepos.findByStrainId(currentStrain.getStrainid()))
+    {
+      rtnStrain.getEffects().add(e.getEffectname());
+    }
+
+    for(FlavorName f : flavorrepos.findByStrainId(currentStrain.getStrainid()))
+    {
+      rtnStrain.getFlavors().add(f.getFlavorname());
+    }
+
+    return rtnStrain;
   }
 
   @Override
@@ -114,8 +139,18 @@ public class StrainServiceImpl implements StrainService
   }
 
   @Override
-  public void deleteUserStrain(Long strainid, Long userid)
+  public void deleteUserStrain(String username, String strainname)
   {
+    Long userid = userrepos.findByUsername(username).getUserid();
+    Long strainid = strainrepos.findByStrain(strainname).getStrainid();
 
+    if (strainrepos.checkUserStrainsCombo(userid, strainid).getCount() > 0)
+    {
+      strainrepos.deleteUserStrain(userid, strainid);
+    }
+    else
+    {
+      throw new ResourceNotFoundException("User does not have this strain (User-Strain combination not found)");
+    }
   }
 }

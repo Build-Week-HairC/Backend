@@ -10,7 +10,9 @@ public interface StrainService
 {
   List<Strain> findAll();
 
-  List<ResStrain> findByUserId(Long userid);
+  List<ResStrain> findByUsername(String username);
+
+  ResStrain findById(Long strainid);
 
   Strain save(ResStrain strain);
 
@@ -18,5 +20,5 @@ public interface StrainService
 
   Strain update(Strain strain, Long strainid);
 
-  void deleteUserStrain(Long strainid, Long userid);
+  void deleteUserStrain(String username, String strainname);
 }

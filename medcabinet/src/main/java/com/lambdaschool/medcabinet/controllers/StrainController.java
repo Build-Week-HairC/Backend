@@ -28,27 +28,26 @@ public class StrainController
   private FlavorService flavorService;
 
   // find all strains
-  // GET -- /strains/strains
-  @GetMapping(value = "/strains",
+  // GET -- /strains/strains/all
+  @GetMapping(value = "/strains/all",
               produces = {"application/json"})
   public ResponseEntity<?> listAllStrains()
   {
     return new ResponseEntity<>(strainService.findAll(), HttpStatus.OK);
   }
 
-  // find strains by user id
-  // GET -- /strains/strains/user/{userid}
-  @GetMapping(value = "/strains/user/{userid}",
+  // find strains by user
+  // GET -- /strains/strains
+  @GetMapping(value = "/strains/user",
               produces = {"application/json"})
-  public ResponseEntity<?> findStrainsByUserId(@PathVariable
-                                                 Long userid)
+  public ResponseEntity<?> findStrainsByUser(Authentication authentication)
   {
-    return new ResponseEntity<>(strainService.findByUserId(userid), HttpStatus.OK);
+    return new ResponseEntity<>(strainService.findByUsername(authentication.getName()), HttpStatus.OK);
   }
 
   // add a strain to a user by user id
   // if the strain is not in the database, adds it
-  // POST -- /strains/strain/user/{userid}
+  // POST -- /strains/strain
   @PostMapping(value = "/strain",
                consumes = {"application/json"},
                produces = {"application/json"})
@@ -62,26 +61,28 @@ public class StrainController
     effectService.saveList(strain.getEffects(), newStrain.getStrainid());
     flavorService.saveList(strain.getFlavors(), newStrain.getStrainid());
 
-    return new ResponseEntity<>(newStrain, HttpStatus.OK);
+    return new ResponseEntity<>(strainService.findById(newStrain.getStrainid()), HttpStatus.OK);
   }
 
   // edit strain -- TODO what fields should update?
   // PUT -- /strains/strain/{strainid}
-  @PutMapping(value = "/user/{userid}",
-               consumes = {"application/json"},
-               produces = {"application/json"})
-  public ResponseEntity<?> editStrain(@PathVariable Long userid)
-  {
-    return new ResponseEntity<>(HttpStatus.OK);
-  }
+//  @PutMapping(value = "/user/{userid}",
+//               consumes = {"application/json"},
+//               produces = {"application/json"})
+//  public ResponseEntity<?> editStrain(@PathVariable Long userid)
+//  {
+//    return new ResponseEntity<>(HttpStatus.OK);
+//  }
 
-  // delete strain from user using ids
+  // delete strain from user
   // does not delete strain from database if it belongs to other users
-  // DELETE -- /strains/strain/{strainid}/user/{userid}
-  @DeleteMapping(value = "/strain/{strainid}/user/{userid}",
+  // DELETE -- /strains/strain/
+  @DeleteMapping(value = "/strain",
               produces = {"application/json"})
-  public ResponseEntity<?> findStrainsByUser(@PathVariable Long strainid, @PathVariable Long userid)
+  public ResponseEntity<?> deleteStrainFromUser(Authentication authentication,
+                                                @RequestBody ResStrain strain)
   {
+    strainService.deleteUserStrain(authentication.getName(), strain.getStrain());
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }
