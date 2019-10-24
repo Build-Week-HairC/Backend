@@ -5,18 +5,22 @@ import com.lambdaschool.medcabinet.models.Strain;
 import com.lambdaschool.medcabinet.services.EffectService;
 import com.lambdaschool.medcabinet.services.FlavorService;
 import com.lambdaschool.medcabinet.services.StrainService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/strains")
 public class StrainController
 {
+  private static final Logger logger = LoggerFactory.getLogger(StrainController.class);
 
   @Autowired
   private StrainService strainService;
@@ -31,8 +35,11 @@ public class StrainController
   // GET -- /strains/strains/all
   @GetMapping(value = "/strains/all",
               produces = {"application/json"})
-  public ResponseEntity<?> listAllStrains()
+  public ResponseEntity<?> listAllStrains(HttpServletRequest request)
   {
+    logger.trace(request.getMethod()
+        .toUpperCase() + " " + request.getRequestURI() + " accessed");
+
     return new ResponseEntity<>(strainService.findAll(), HttpStatus.OK);
   }
 
@@ -40,8 +47,12 @@ public class StrainController
   // GET -- /strains/strains
   @GetMapping(value = "/strains/user",
               produces = {"application/json"})
-  public ResponseEntity<?> findStrainsByUser(Authentication authentication)
+  public ResponseEntity<?> findStrainsByUser(Authentication authentication,
+                                             HttpServletRequest request)
   {
+    logger.trace(request.getMethod()
+        .toUpperCase() + " " + request.getRequestURI() + " accessed");
+
     return new ResponseEntity<>(strainService.findByUsername(authentication.getName()), HttpStatus.OK);
   }
 
@@ -54,8 +65,12 @@ public class StrainController
   public ResponseEntity<?> addStrainToUser(Authentication authentication,
                                            @Valid
                                            @RequestBody
-                                               ResStrain strain)
+                                               ResStrain strain,
+                                           HttpServletRequest request)
   {
+    logger.trace(request.getMethod()
+        .toUpperCase() + " " + request.getRequestURI() + " accessed");
+
     Strain newStrain = strainService.addToUser(authentication.getName(), strain);
 
     effectService.saveList(strain.getEffects(), newStrain.getStrainid());
@@ -80,8 +95,12 @@ public class StrainController
   @DeleteMapping(value = "/strain",
               produces = {"application/json"})
   public ResponseEntity<?> deleteStrainFromUser(Authentication authentication,
-                                                @RequestBody ResStrain strain)
+                                                @RequestBody ResStrain strain,
+                                                HttpServletRequest request)
   {
+    logger.trace(request.getMethod()
+        .toUpperCase() + " " + request.getRequestURI() + " accessed");
+
     strainService.deleteUserStrain(authentication.getName(), strain.getStrain());
     return new ResponseEntity<>(HttpStatus.OK);
   }
