@@ -82,7 +82,6 @@ public class StrainController
   public ResponseEntity<?> deleteStrainFromUser(Authentication authentication,
                                                 @RequestBody ResStrain strain)
   {
-//    System.out.println(authentication.getName());
     strainService.deleteUserStrain(authentication.getName(), strain.getStrain());
     return new ResponseEntity<>(HttpStatus.OK);
   }
