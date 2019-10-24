@@ -37,9 +37,4 @@ public class EffectServiceImpl implements EffectService
     }
   }
 
-  @Override
-  public void delete(long effectid)
-  {
-
-  }
 }
