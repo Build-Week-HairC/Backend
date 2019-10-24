@@ -37,9 +37,4 @@ public class FlavorServiceImpl implements FlavorService
     }
   }
 
-  @Override
-  public void delete(long flavorid)
-  {
-
-  }
 }

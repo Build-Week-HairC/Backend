@@ -8,7 +8,5 @@ public interface FlavorService
 {
   Flavor save(String flavorname);
 
-  void delete(long flavorid);
-
   void saveList(List<String> flavors, Long strainid);
 }
