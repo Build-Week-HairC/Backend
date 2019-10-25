@@ -79,16 +79,6 @@ public class StrainController
     return new ResponseEntity<>(strainService.findById(newStrain.getStrainid()), HttpStatus.OK);
   }
 
-  // edit strain -- TODO what fields should update?
-  // PUT -- /strains/strain/{strainid}
-//  @PutMapping(value = "/user/{userid}",
-//               consumes = {"application/json"},
-//               produces = {"application/json"})
-//  public ResponseEntity<?> editStrain(@PathVariable Long userid)
-//  {
-//    return new ResponseEntity<>(HttpStatus.OK);
-//  }
-
   // delete strain from user
   // does not delete strain from database if it belongs to other users
   // DELETE -- /strains/strain/
