@@ -28,7 +28,15 @@ public class FlavorServiceImpl implements FlavorService
     {
       if (flavorrepos.findFlavorByFlavorname(flavorname) != null)
       {
-        flavorrepos.insertStrainFlavor(strainid, flavorrepos.findFlavorByFlavorname(flavorname).getFlavorid());
+        Flavor currentFlavor = flavorrepos.findFlavorByFlavorname(flavorname);
+        if (flavorrepos.checkStrainFlavorCombo(strainid, currentFlavor.getFlavorid()).getCount() <= 0)
+        {
+          flavorrepos.insertStrainFlavor(strainid, currentFlavor.getFlavorid());
+        }
+        else
+        {
+          // do nothing
+        }
       } else
       {
         Flavor newEffect = this.save(flavorname);
@@ -37,9 +45,4 @@ public class FlavorServiceImpl implements FlavorService
     }
   }
 
-  @Override
-  public void delete(long flavorid)
-  {
-
-  }
 }
