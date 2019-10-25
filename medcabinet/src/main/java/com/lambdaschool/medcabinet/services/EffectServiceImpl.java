@@ -1,5 +1,6 @@
 package com.lambdaschool.medcabinet.services;
 
+import com.lambdaschool.medcabinet.exceptions.ResourceFoundException;
 import com.lambdaschool.medcabinet.models.Effect;
 import com.lambdaschool.medcabinet.repository.EffectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,15 @@ public class EffectServiceImpl implements EffectService
     {
       if (effectrepos.findEffectByEffectname(effectname) != null)
       {
-        effectrepos.insertStrainEffect(strainid, effectrepos.findEffectByEffectname(effectname).getEffectid());
+        Effect currentEffect = effectrepos.findEffectByEffectname(effectname);
+        if (effectrepos.checkStrainEffectCombo(strainid, currentEffect.getEffectid()).getCount() <= 0)
+        {
+          effectrepos.insertStrainEffect(strainid, currentEffect.getEffectid());
+        }
+        else
+        {
+          // do nothing
+        }
       } else
       {
         Effect newEffect = this.save(effectname);
